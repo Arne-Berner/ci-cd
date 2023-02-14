@@ -1,8 +1,6 @@
 name: Discord Notification
 
 on:
-  issues:
-    types: [assigned]
   workflow_run:
     
 jobs:
@@ -14,5 +12,5 @@ jobs:
         with:
           webhook_id: ${{ secrets.DISCORD_WEBHOOK_ID }}
           webhook_token: ${{ secrets.DISCORD_WEBHOOK_TOKEN }}
-          message: "Hey! A pull request has been assigned to you."
+          message: Hey! A pull request has been assigned to you.
 
