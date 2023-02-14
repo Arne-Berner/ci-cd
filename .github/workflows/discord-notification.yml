@@ -3,17 +3,16 @@ name: Discord Notification
 on:
   issues:
     types: [assigned]
+  workflow_run:
+    
 jobs:
   discord-notification:
     runs-on: ubuntu-latest
     steps:
-      - name: Get assignee username
-        id: assignee
-        run: echo "::set-output name=username::${{ github.event.issue.assignee.login }}"
       - name: Send Discord notification
         uses: appleboy/discord-action@master
         with:
           webhook_id: ${{ secrets.DISCORD_WEBHOOK_ID }}
           webhook_token: ${{ secrets.DISCORD_WEBHOOK_TOKEN }}
-          data: '{"content": "Hey <@${{ steps.assignee.outputs.username }}>! A pull request has been assigned to you."}'
+          message: "Hey! A pull request has been assigned to you."
 
