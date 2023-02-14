@@ -1,0 +1,16 @@
+name: Discord Notification
+
+on:
+  issues:
+    types: [assigned]
+
+jobs:
+  notify-discord:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Discord
+        uses: discord/send-webhook@v0.2.0
+        with:
+          webhook_id: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          webhook-token: ${{ secrets.DISCORD_WEBHOOK_TOKEN }}
+          content: "A pull request has been assigned to someone."
