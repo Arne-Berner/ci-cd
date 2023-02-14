@@ -1,5 +1,3 @@
-name: Create Branch on Issue
-
 on:
   issues:
     types: [opened]
@@ -13,7 +11,31 @@ jobs:
 
       - name: Create Branch
         run: |
-          sudo git config --global user.email "action@github.com"
-          sudo git config --global user.name "Github Actions"
-          sudo git checkout -b issue-${{ github.event.issue.number }}-${{ github.event.issue.title }}
-          sudo git push --set-upstream origin issue-${{ github.event.issue.number }}-${{ github.event.issue.title }}
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+          git checkout -b issue-${{ github.event.issue.number }}-${{ github.event.issue.title }}
+          git push --set-upstream origin issue-${{ github.event.issue.number }}-${{ github.event.issue.title }}
+
+      - name: Update Issue
+        run: |
+          BRANCH_URL="https://github.com/${{ github.repository }}/tree/issue-${{ github.event.issue.number }}-${{ github.event.issue.title }}"
+          URL="https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}"
+
+          # Add label to issue
+          LABELS=$(jq --arg labels "branch-created" '.labels + [$labels]' "${GITHUB_EVENT_PATH}")
+          curl -sS \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Content-Type: application/json" \
+            -d "{\"labels\": ${LABELS}}" \
+            "${URL}"
+
+          # Update issue body
+          BODY=$(jq --arg body "Branch for this issue has been created. Check it out at: $BRANCH_URL" '.body + $body' "${GITHUB_EVENT_PATH}")
+          curl -sS \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Content-Type: application/json" \
+            -d "{\"body\": $BODY}" \
+            "${URL}"
+
