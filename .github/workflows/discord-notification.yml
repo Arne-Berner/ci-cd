@@ -3,6 +3,7 @@ name: Discord Notification
 on:
   issues:
     types: [assigned]
+  workflow_dispatch:
 
 jobs:
   notify-discord:
