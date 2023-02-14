@@ -1,0 +1,15 @@
+name: Discord Notification
+
+on:
+  issues:
+    types: [assigned]
+
+jobs:
+  notify-discord:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Discord
+        uses: appleboy/discord-action@v0.0.4
+        with:
+          webhook_id: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          message: "New pull request assigned to you: ${{ github.event.issue.html_url }} by ${{ github.event.issue.assignee.login }}"
