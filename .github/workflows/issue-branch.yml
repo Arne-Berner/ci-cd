@@ -15,5 +15,5 @@ jobs:
         run: |
           sudo git config --global user.email "action@github.com"
           git config --global user.name "Github Actions"
-          git checkout -b issue-${{ github.event.issue.number }}-${{ github.event.issue.title }}
+          sudo git checkout -b issue-${{ github.event.issue.number }}-${{ github.event.issue.title }}
           git push --set-upstream origin issue-${{ github.event.issue.number }}-${{ github.event.issue.title }}
