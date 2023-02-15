@@ -13,9 +13,11 @@ jobs:
         run: |
           git config --global user.email "action@github.com"
           git config --global user.name "Github Actions"
-          issue_numer="${{ github.event.issue.number}}
           branch_name="${{ github.event.issue.number }}-${{ github.event.issue.title }}"
           branch_name=${branch_name// /-}
           branch_name=${branch_name//[^a-zA-Z0-9_-]/}
-          gh issue develop $issue_number --name "$branch_name" --base main
+          gh issue develop $ISSUE --name "$branch_name" --base main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE: ${{ github.event.issue.number }}
 
