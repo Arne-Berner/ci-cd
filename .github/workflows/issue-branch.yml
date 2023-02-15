@@ -1,3 +1,5 @@
+name: Create branch on issue creation
+
 on:
   issues:
     types: [opened]
