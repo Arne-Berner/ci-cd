@@ -7,14 +7,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
         
       - name: Create Branch
         run: |
           git config --global user.email "action@github.com"
           git config --global user.name "Github Actions"
-          git checkout -b issue-${{ github.event.issue.number }}-${{ github.event.issue.title }}
-          git push --set-upstream origin issue-${{ github.event.issue.number }}-${{ github.event.issue.title }}
+          branch_name="issue-${{ github.event.issue.number }}-${{ github.event.issue.title }}"
+          branch_name=${branch_name// /-}
+          branch_name=${branch_name//[^a-zA-Z0-9_-]/}
+          git checkout -b "$branch_name"
+          git push --set-upstream origin "$branch_name"
 
       - name: Link Branch to Issue
         run: |
