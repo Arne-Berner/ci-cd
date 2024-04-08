@@ -9,18 +9,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         
-      - name: Create Branch
+      - name: Setup Git Environment and Create Branch
         run: |
           git config --global user.email "action@github.com"
-          git config --global user.name "Github Actions"
+          git config --global user.name "GitHub Actions"
           branch_name="${{ github.event.issue.number }}-${{ github.event.issue.title }}"
-          branch_name=${branch_name// /-}
-          branch_name=${branch_name//[^a-zA-Z0-9_-]/}
-          gh issue develop $ISSUE --name "$branch_name" --base main
+          branch_name=${branch_name// /-} # Replaces spaces with hyphens
+          branch_name=${branch_name//[^a-zA-Z0-9_-]/} # Removes disallowed characters
+          echo "Creating branch: $branch_name"
+          
+          git branch "$branch_name"
+          git push origin main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ISSUE: ${{ github.event.issue.number }}
 
 # github token is necessary for gh to work
+# without gh now?
