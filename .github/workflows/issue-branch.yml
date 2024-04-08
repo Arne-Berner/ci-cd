@@ -19,5 +19,5 @@ jobs:
           branch_name=${branch_name// /-}
           branch_name=${branch_name//[^a-zA-Z0-9_-]/}
           gh issue develop $ISSUE --name "$branch_name" --base main
-      - env:
+        env:
           ISSUE: ${{ github.event.issue.number }}
